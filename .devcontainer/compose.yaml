@@ -1,0 +1,27 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - ../..:/workspaces:cached
+    command: sleep infinity
+    networks:
+      - app
+
+  nginx:
+    image: nginx:latest
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "80:80"
+    volumes:
+      - ./default.conf:/etc/nginx/templates/default.conf.template:ro
+    networks:
+      - app
+
+networks:
+  app:
